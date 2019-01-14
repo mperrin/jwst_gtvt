@@ -127,7 +127,7 @@ def window_summary_line(fixed, wstart, wend, pa_start, pa_end, ra_start, ra_end,
         line = " {:15} {:11} {:11.2f} ".format(Time(wstart, format='mjd', out_subfmt='date').isot,
                                                Time(wend, format='mjd', out_subfmt='date').isot,wend-wstart)
     line += "{:13.5f} {:13.5f} ".format(pa_start*R2D,pa_end*R2D)
-    if args['fixed']:
+    if fixed:
         line += "{:13.5f} {:13.5f} ".format(ra_start*R2D, dec_start*R2D)
     else:
         line += "{:13.5f} {:13.5f} {:13.5f} {:13.5f} ".format(ra_start*R2D, ra_end*R2D, dec_start*R2D, dec_end*R2D)
