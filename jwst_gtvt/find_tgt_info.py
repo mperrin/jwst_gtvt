@@ -127,7 +127,7 @@ def window_summary_line(fixed, wstart, wend, pa_start, pa_end, ra_start, ra_end,
         line = " {:15} {:11} {:11.2f} ".format(Time(wstart, format='mjd', out_subfmt='date').isot,
                                                Time(wend, format='mjd', out_subfmt='date').isot,wend-wstart)
     line += "{:13.5f} {:13.5f} ".format(pa_start*R2D,pa_end*R2D)
-    if fixed:
+    if args['fixed']:
         line += "{:13.5f} {:13.5f} ".format(ra_start*R2D, dec_start*R2D)
     else:
         line += "{:13.5f} {:13.5f} {:13.5f} {:13.5f} ".format(ra_start*R2D, ra_end*R2D, dec_start*R2D, dec_end*R2D)
@@ -200,7 +200,7 @@ def main():
 
     print("", file=table_output)
     print("       Target", file=table_output)
-    if fixed:
+    if args['fixed']:
         print("                ecliptic", file=table_output)
         print("RA      Dec     latitude", file=table_output)
         print("%7.3f %7.3f %7.3f" % (ra[0]*R2D,dec[0]*R2D,calc_ecliptic_lat(ra[0], dec[0])*R2D), file=table_output)
@@ -218,13 +218,13 @@ def main():
         iflag_old = A_eph.is_valid(search_start,ra[0],dec[0],pa)
         print("|           Window [days]                 |   Specified V3 PA [deg]  |", end='', file=table_output)
 
-    if fixed:
+    if args['fixed']:
         print('\n', end='', file=table_output)
     else:
         print('{:^27s}|{:^27s}|'.format('RA', 'Dec'), file=table_output)
 
     print("   Start           End         Duration         Start         End    ", end='', file=table_output)
-    if fixed:
+    if args['fixed']:
         print("{:^13s} {:^13s}".format('RA', 'Dec'), file=table_output)
     else:
         print("{:^13s} {:^13s} {:^13s} {:^13s}".format('Start', 'End', 'Start', 'End'), file=table_output)
@@ -269,7 +269,7 @@ def main():
                         pa_end = pa
                     ra_end = ra[i]
                     dec_end = dec[i]
-                    print(window_summary_line(fixed, wstart, wend, pa_start, pa_end, ra_start, ra_end, dec_start, dec_end), file=table_output)
+                    print(window_summary_line(args['fixed'], wstart, wend, pa_start, pa_end, ra_start, ra_end, dec_start, dec_end), file=table_output)
             iflag_old = iflag
 
     if iflip == True and iflag == True:
@@ -279,13 +279,13 @@ def main():
         else:
             pa_start = pa
             pa_end = pa
-        print(window_summary_line(fixed, twstart, adate, pa_start, pa_end, ra[i], ra[i], dec[i], dec[i]), file=table_output)
+        print(window_summary_line(args['fixed'], twstart, adate, pa_start, pa_end, ra[i], ra[i], dec[i], dec[i]), file=table_output)
 
     if iflip == False and iflag == True and pa == "X":
         if dec[i] >0.:
-            print(window_summary_line(fixed, 0, 0, 2 * np.pi, 0, ra[0], ra[-1], dec[0], dec[-1], cvz=True), file=table_output)
+            print(window_summary_line(args['fixed'], 0, 0, 2 * np.pi, 0, ra[0], ra[-1], dec[0], dec[-1], cvz=True), file=table_output)
         else:
-            print(window_summary_line(fixed, 0, 0, 0, 2 * np.pi, ra[0], ra[-1], dec[0], dec[-1], cvz=True), file=table_output)
+            print(window_summary_line(args['fixed'], 0, 0, 0, 2 * np.pi, ra[0], ra[-1], dec[0], dec[-1], cvz=True), file=table_output)
 
     if 1==1:
         wstart = search_start
@@ -299,7 +299,7 @@ def main():
 
         print("", file=table_output)
         print("", file=table_output)
-        if fixed:
+        if args['fixed']:
             fmt_repeats = 6
             print("                V3PA          NIRCam           NIRSpec         NIRISS           MIRI          FGS", file=table_output)
             print("   Date      min    max      min    max       min    max     min    max      min    max      min    max", file=table_output)
@@ -365,7 +365,7 @@ def main():
                 maxFGS_PA_data.append(maxFGS_PA)            
                 #print '%7.1f %6.2f %6.2f %6.2f' % (atime, V3PA, NIRCam_PA, NIRSpec_PA)
                 fmt = '{}' + '   {:6.2f} {:6.2f}'*fmt_repeats
-                if fixed:
+                if args['fixed']:
                     print(fmt.format(
                         Time(atime, format='mjd', out_subfmt='date').isot, minV3PA, maxV3PA,
                         minNIRCam_PA, maxNIRCam_PA, minNIRSpec_PA, maxNIRSpec_PA, minNIRISS_PA,
@@ -415,7 +415,7 @@ def main():
             for label in labels:
                 label.set_rotation(30)
 
-            if fixed:
+            if args['fixed']:
                 axes[0,1].set_title('(R.A. = {}, Dec. = {})\n'.format(args['<ra>'], args['<dec>'])+"NIRCam")
             plot_single_instrument(axes[0,1], 'NIRCam', times, minNIRCam_PA_data, maxNIRCam_PA_data)
             axes[0,1].fmt_xdata = DateFormatter('%Y-%m-%d')
@@ -494,7 +494,7 @@ def main():
             targname = name
         else:
             targname = ''
-        if fixed:
+        if args['fixed']:
             suptitle = '{} (RA = {}, DEC = {})'.format(targname, args['<ra>'], args['<dec>'])
         else:
             suptitle = '{}'.format(targname, ra, dec)
