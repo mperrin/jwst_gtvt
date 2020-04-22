@@ -24,14 +24,12 @@ Qecl2eci = QX(obliquity_of_the_ecliptic)
 
 
 class Ephemeris:
-    def __init__(self, afile, cnvrt=False, verbose=True):
+    def __init__(self,afile,cnvrt=False):
         """Eph constructor, cnvrt True converts into Ecliptic frame """
         if cnvrt:
-            if verbose:
-                print("Using Ecliptic Coordinates")
+            print("Using Ecliptic Coordinates")
         else:
-            if verbose:
-                print("Using Equatorial Coordinates")
+            print("Using Equatorial Coordinates")
         self.datelist = []
         self.xlist = []
         self.ylist = []
@@ -52,8 +50,7 @@ class Ephemeris:
                     if fin[istart].find('Sun') > -1:
                         not_there = False
                     else:
-                        if verbose:
-                            print(fin[istart])
+                        print(fin[istart])
                 istart += 1
             istart += 1
             if not_there:
